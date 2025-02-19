@@ -142,6 +142,9 @@ export default definePlugin({
         )
     },
     stop() {
-        DiscordNative.nativeModules.requireModule("discord_utils").inputEventUnregister(KEYBIND_ID)
+        const discordUtils = DiscordNative.nativeModules.requireModule("discord_utils");
+
+        discordUtils.inputEventUnregister(NEXT_CHANNEL_KEYBIND_ID)
+        discordUtils.inputEventUnregister(PREVIOUS_CHANNEL_KEYBIND_ID)
     }
 });
