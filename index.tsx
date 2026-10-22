@@ -1,5 +1,5 @@
 import definePlugin, {OptionType} from "@utils/types";
-import {ChannelStore, GuildChannelStore, PermissionStore, SelectedChannelStore, Toasts} from "@webpack/common";
+import {ChannelStore, GuildChannelStore, PermissionStore, SelectedChannelStore, showToast} from "@webpack/common";
 import {findByPropsLazy} from "@webpack";
 import {definePluginSettings} from "@api/Settings";
 
@@ -28,10 +28,9 @@ const settings = definePluginSettings({
 const goToNextChannel = () => {
     const currentChannelId = SelectedChannelStore.getVoiceChannelId();
     if (!currentChannelId) {
-        Toasts.show({
-            message: "You aren't in voice channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "You aren't in voice channel",
+            variant: "critical"
         });
         return;
     }
@@ -39,10 +38,9 @@ const goToNextChannel = () => {
 
     const currentChannel = ChannelStore.getChannel(currentChannelId)
     if (!currentChannel.isGuildVoice()) {
-        Toasts.show({
-            message: "You aren't in VOICE channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "You aren't in VOICE channel",
+            variant: "critical"
         });
         return
     }
@@ -60,10 +58,9 @@ const goToNextChannel = () => {
     const {channel: nextChannel} = voiceChannels.find(o => o.channel.position === currentChannel.position + 1) ?? voiceChannels[0];
 
     if (!nextChannel) {
-        Toasts.show({
-            message: "Couldn't find next channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "Couldn't find next channel",
+            variant: "critical"
         });
         return;
     }
@@ -74,10 +71,9 @@ const goToNextChannel = () => {
 const goToPreviousChannel = () => {
     const currentChannelId = SelectedChannelStore.getVoiceChannelId();
     if (!currentChannelId) {
-        Toasts.show({
-            message: "You aren't in voice channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "You aren't in voice channel",
+            variant: "critical"
         });
         return;
     }
@@ -85,10 +81,9 @@ const goToPreviousChannel = () => {
 
     const currentChannel = ChannelStore.getChannel(currentChannelId)
     if (!currentChannel.isGuildVoice()) {
-        Toasts.show({
-            message: "You aren't in VOICE channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "You aren't in VOICE channel",
+            variant: "critical"
         });
         return
     }
@@ -96,10 +91,9 @@ const goToPreviousChannel = () => {
     const voiceChannels = GuildChannelStore.getChannels(currentChannel.getGuildId()).VOCAL.filter(({channel}) => PermissionStore.can(CONNECT, channel));
     const {channel: previousChannel} = voiceChannels.find(o => o.channel.position === currentChannel.position - 1) ?? voiceChannels[0];
     if (!previousChannel) {
-        Toasts.show({
-            message: "Couldn't find next channel",
-            id: Toasts.genId(),
-            type: Toasts.Type.FAILURE
+        showToast({
+            text: "Couldn't find next channel",
+            variant: "critical"
         });
         return;
     }
